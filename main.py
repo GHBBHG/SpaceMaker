@@ -73,6 +73,19 @@ def limpar_marcadores():
     informacoes()
     coordenadas_estrelas.clear()
 
+# carregar informações
+def carregar_pontos():
+    filename = filedialog.askopenfilename(filetypes=[("Text Files", "*.txt")])
+    if filename:
+        dados_estrelas.clear() 
+        with open(filename, "r") as file:
+            for line in file:
+                if line.startswith("nome:"):
+                    nome = line.split("nome:")[1].split(",")[0].strip()
+                    pos_str = line.split("posição:")[1].strip()
+                    pos = tuple(map(int, pos_str.strip("()").split(",")))
+                    dados_estrelas[nome] = pos
+
 def linhas():
       if len(coordenadas_estrelas) >= 2:
                 for i in range(len(coordenadas_estrelas) - 1):
@@ -105,7 +118,7 @@ while rodando:
                 elif evento.key == pygame.K_F9:
                     salvar_estrela()
                 elif evento.key == pygame.K_F10:
-                    pass
+                    carregar_pontos()
                 elif evento.key == pygame.K_F11:
                     limpar_marcadores()
             elif evento.type == pygame.MOUSEBUTTONDOWN and evento.button == 1:
